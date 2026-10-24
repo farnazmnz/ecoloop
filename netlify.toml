@@ -1,0 +1,13 @@
+# Netlify — hosts the Next.js frontend. Site settings → Build: base "frontend" is set here.
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"
+  # Point the UI at the Render backend once it exists (Site settings → Environment variables
+  # overrides this): NEXT_PUBLIC_API_URL = "https://ecoloop-backend.onrender.com"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

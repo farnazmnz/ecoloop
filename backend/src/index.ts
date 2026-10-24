@@ -17,7 +17,28 @@ const allowedOrigins = (process.env.CORS_ORIGIN ?? "http://localhost:3000")
   .map((o) => o.trim())
   .filter(Boolean);
 
-app.use(cors({ origin: allowedOrigins }));
+// Exact origins, or "*.example.com" wildcards (handy for Netlify deploy previews).
+function originAllowed(origin: string): boolean {
+  return allowedOrigins.some((rule) => {
+    if (rule === "*") return true;
+    if (rule.startsWith("*.")) {
+      const suffix = rule.slice(1); // ".netlify.app"
+      return origin.startsWith("https://") && origin.slice("https://".length).endsWith(suffix);
+    }
+    return origin === rule;
+  });
+}
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // No Origin header = same-origin, curl, health checks → allow.
+      if (!origin || originAllowed(origin)) callback(null, true);
+      else callback(new Error(`CORS: origin ${origin} not allowed`));
+    },
+  }),
+);
+app.set("trust proxy", 1); // Render/Netlify sit behind a proxy
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/api/health", (_req, res) => {

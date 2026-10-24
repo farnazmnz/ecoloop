@@ -1,0 +1,29 @@
+# Render Blueprint — deploys the Express backend on Render's free tier.
+# Dashboard → New → Blueprint → pick this repo. Fill the `sync: false` secrets when prompted.
+services:
+  - type: web
+    name: ecoloop-backend
+    runtime: node
+    plan: free
+    region: ohio
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: PORT
+        value: "10000"
+      - key: CORS_ORIGIN
+        # Your Netlify URL(s), comma-separated. "*.netlify.app" allows deploy previews too.
+        value: "https://ecoloop.netlify.app,*.netlify.app,http://localhost:3000"
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_BASE64
+        sync: false
+      - key: FIREBASE_STORAGE_BUCKET
+        sync: false
