@@ -1,0 +1,30 @@
+{
+  "_todo": "Verify every name, address and hours against markham.ca before demo. mapsUrl always works even if addresses are wrong.",
+  "mapsUrl": "https://www.google.com/maps/search/Markham+Recycling+Depot",
+  "depots": [
+    {
+      "id": "recycling-depot-east",
+      "name": "Markham Recycling Depot (East)",
+      "type": "recycling_depot",
+      "address": "TODO verify — Markham, ON",
+      "accepts": ["styrofoam", "scrap_metal", "cardboard", "glass", "textiles", "yard_waste"],
+      "mapsUrl": "https://www.google.com/maps/search/Markham+Recycling+Depot"
+    },
+    {
+      "id": "recycling-depot-west",
+      "name": "Markham Recycling Depot (West)",
+      "type": "recycling_depot",
+      "address": "TODO verify — Markham, ON",
+      "accepts": ["styrofoam", "scrap_metal", "cardboard", "glass", "textiles", "yard_waste"],
+      "mapsUrl": "https://www.google.com/maps/search/Markham+Recycling+Depot"
+    },
+    {
+      "id": "hhw-electronics-depot",
+      "name": "Household Hazardous Waste & Electronics Depot",
+      "type": "hazardous_depot",
+      "address": "TODO verify — Markham, ON",
+      "accepts": ["batteries", "paint", "chemicals", "small_electronics", "light_bulbs", "propane"],
+      "mapsUrl": "https://www.google.com/maps/search/Markham+Household+Hazardous+Waste+Depot"
+    }
+  ]
+}

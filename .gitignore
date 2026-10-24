@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# env — never commit secrets
+.env
+.env.*
+!.env.example
+serviceAccount*.json
+service-account*.json
+
+# build output
+.next/
+out/
+dist/
+.vercel/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# misc
+*.log
+.DS_Store
+Thumbs.db
+*.tsbuildinfo

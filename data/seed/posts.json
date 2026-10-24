@@ -1,0 +1,14 @@
+[
+  {
+    "id": "seed-post-chair",
+    "ownerId": "demo-user",
+    "title": "Wooden dining chair",
+    "description": "Solid oak chair, a few scuffs. Pickup near Unionville Main Street.",
+    "category": "furniture",
+    "condition": "good",
+    "photoURL": "https://picsum.photos/seed/remarkham-chair/800/800",
+    "location": { "lat": 43.8656, "lng": -79.3107 },
+    "status": "open",
+    "claimCount": 0
+  }
+]

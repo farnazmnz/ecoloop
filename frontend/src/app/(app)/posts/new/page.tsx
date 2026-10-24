@@ -1,0 +1,173 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect, useState, type FormEvent } from "react";
+
+import { PageHeader } from "@/components/AppShell";
+import { CameraCapture } from "@/components/CameraCapture";
+import { ItemImage } from "@/components/ItemImage";
+import { CheckIcon, MapPinIcon, SparklesIcon } from "@/components/icons";
+import { Button } from "@/components/ui/Button";
+import { Field, Segmented, inputClass } from "@/components/ui/Field";
+import { useToast } from "@/components/ui/Toast";
+import { POINTS } from "@/lib/points";
+import { clearPrefill, getPrefill } from "@/lib/session";
+import { useStore } from "@/lib/store";
+import { CATEGORIES, CATEGORY_META, CONDITIONS, CONDITION_META, type Category, type Condition } from "@/lib/types";
+
+export default function NewPostPage() {
+  const router = useRouter();
+  const toast = useToast();
+  const { currentUser, createPost } = useStore();
+
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState<Category>("other");
+  const [condition, setCondition] = useState<Condition>("good");
+  const [fromScanId, setFromScanId] = useState<string | undefined>();
+  const [fromScan, setFromScan] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const p = getPrefill();
+    if (!p) return;
+    if (p.title) setTitle(p.title);
+    if (p.description) setDescription(p.description);
+    if (p.category) setCategory(p.category);
+    if (p.photoURL) setPhoto(p.photoURL);
+    if (p.fromScanId) setFromScanId(p.fromScanId);
+    setFromScan(!!p.fromScanId);
+    clearPrefill();
+  }, []);
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (title.trim().length < 3) {
+      setError("Give it a short title (at least 3 characters).");
+      return;
+    }
+    setError(null);
+    setSubmitting(true);
+    const r = createPost({
+      title,
+      description: description || "No description — ask the giver for details.",
+      category,
+      condition,
+      photoURL: photo ?? "",
+      fromScanId,
+    });
+    setSubmitting(false);
+    toast.points(r.delta, r.bonus ? `7-day streak bonus too! 🔥 ${r.streakCount}-day streak` : `${r.streakCount}-day streak 🔥`);
+    router.push("/feed");
+  };
+
+  return (
+    <>
+      <PageHeader
+        title="Give something away"
+        subtitle="Post it free for a neighbour. You earn points when the pickup is confirmed."
+        back={{ href: "/feed", label: "Home" }}
+      />
+
+      {fromScan && (
+        <div className="mb-5 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+          <SparklesIcon className="shrink-0 text-emerald-600" />
+          Prefilled from your scan — tweak anything before posting.
+        </div>
+      )}
+
+      <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-8">
+        <div className="space-y-3">
+          <p className="text-sm font-semibold text-stone-800">Photo</p>
+          {photo ? (
+            <div className="space-y-3">
+              <ItemImage src={photo} alt="Your item" category={category} loading="eager" className="aspect-square w-full rounded-3xl border border-stone-200 lg:aspect-[4/3]" />
+              <Button variant="outline" onClick={() => setPhoto(null)} fullWidth>
+                Retake or choose another photo
+              </Button>
+            </div>
+          ) : (
+            <CameraCapture onCapture={setPhoto} helper="Add a clear photo — items with photos get picked up 3× faster." />
+          )}
+        </div>
+
+        <div className="space-y-5">
+          <Field label="Title" htmlFor="title" error={error ?? undefined}>
+            <input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. Oak dining chair"
+              className={inputClass}
+              maxLength={80}
+              required
+            />
+          </Field>
+
+          <Field label="Description" htmlFor="description" optional hint="Size, condition details, pickup notes.">
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Solid chair, a few scuffs. Porch pickup in Unionville, evenings best."
+              rows={4}
+              className={`${inputClass} resize-none`}
+              maxLength={600}
+            />
+          </Field>
+
+          <div>
+            <p className="mb-1.5 text-sm font-semibold text-stone-800">Category</p>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+              {CATEGORIES.map((c) => {
+                const selected = c === category;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setCategory(c)}
+                    aria-pressed={selected}
+                    className={`flex h-16 flex-col items-center justify-center gap-1 rounded-2xl border text-xs font-semibold transition ${
+                      selected
+                        ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/20"
+                        : "border-stone-200 bg-white text-stone-600 hover:border-stone-300 hover:bg-stone-50"
+                    }`}
+                  >
+                    <span className="text-xl" aria-hidden="true">
+                      {CATEGORY_META[c].emoji}
+                    </span>
+                    {CATEGORY_META[c].label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-1.5 text-sm font-semibold text-stone-800">Condition</p>
+            <Segmented
+              ariaLabel="Condition"
+              value={condition}
+              onChange={setCondition}
+              options={CONDITIONS.map((c) => ({ value: c, label: CONDITION_META[c].label }))}
+            />
+          </div>
+
+          <div className="flex items-center gap-2 rounded-2xl bg-stone-100 px-4 py-3 text-sm text-stone-700">
+            <MapPinIcon size={16} className="text-emerald-600" />
+            Pickup near <span className="font-semibold">{currentUser?.neighbourhood ?? "Markham"}</span>
+            <span className="ml-auto text-xs text-stone-400">from your location</span>
+          </div>
+
+          <div className="sticky bottom-20 z-10 md:static">
+            <Button type="submit" size="xl" fullWidth loading={submitting} leftIcon={<CheckIcon />}>
+              Post it · +{POINTS.post_created} pts
+            </Button>
+          </div>
+        </div>
+      </form>
+    </>
+  );
+}

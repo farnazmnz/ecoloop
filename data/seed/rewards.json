@@ -1,0 +1,11 @@
+[
+  {
+    "id": "seed-reward-coffee",
+    "businessName": "Unionville Main Street Café",
+    "title": "Free coffee",
+    "description": "One regular drip coffee. Fictional business for demo purposes.",
+    "cost": 50,
+    "address": "Main Street Unionville, Markham (fictional)",
+    "emoji": "☕"
+  }
+]
