@@ -6,8 +6,8 @@
 
 [build.environment]
   NODE_VERSION = "24"
-  # Point the UI at the Render backend once it exists (Site settings → Environment variables
-  # overrides this): NEXT_PUBLIC_API_URL = "https://ecoloop-backend.onrender.com"
+  # Render backend (Site configuration → Environment variables overrides this).
+  NEXT_PUBLIC_API_URL = "https://ecoloop-backend-7c5l.onrender.com"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

@@ -116,7 +116,7 @@ the frontend has the tab layout and placeholder pages. Build order and acceptanc
 `netlify.toml` at the repo root already sets base dir `frontend`, build `npm run build`, publish `.next`.
 
 1. app.netlify.com → **Add new site → Import an existing project** → this GitHub repo. Deploy.
-2. After the backend exists, add env var `NEXT_PUBLIC_API_URL = https://<your-service>.onrender.com`
+2. After the backend exists, add env var `NEXT_PUBLIC_API_URL = https://ecoloop-backend-7c5l.onrender.com` (already in `netlify.toml`)
    (Site configuration → Environment variables) and redeploy.
 
 Demo mode needs no env vars at all.
@@ -129,7 +129,7 @@ Demo mode needs no env vars at all.
 2. When prompted, fill the secrets: `GEMINI_API_KEY`, `FIREBASE_SERVICE_ACCOUNT_BASE64`,
    `FIREBASE_STORAGE_BUCKET` (leave blank until Firebase is set up; `/api/health` works without them).
 3. Set `CORS_ORIGIN` to your Netlify URL (defaults allow `*.netlify.app`).
-4. Health check: `https://<your-service>.onrender.com/api/health` → `{"ok":true}`.
+4. Health check: `https://ecoloop-backend-7c5l.onrender.com/api/health` → `{"ok":true}`.
 
 Free-tier note: Render spins the service down after 15 min idle; the first request then takes ~30–50 s.
 Open the health URL once before a demo to wake it.
