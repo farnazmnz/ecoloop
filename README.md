@@ -4,6 +4,8 @@
 it belongs in → log it or give it away on a nearby-first marketplace → earn points → redeem them at
 local businesses.
 
+https://ecoloopmarkham.netlify.app/ 
+
 Built for the GDG Markham 24-hour civic-tech hackathon (waste-reduction track).
 The full product spec, data model, API contract and build phases live in [docs/SPEC.md](docs/SPEC.md).
 
