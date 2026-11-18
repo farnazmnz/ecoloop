@@ -8,6 +8,8 @@ https://ecoloopmarkham.netlify.app/
 
 Built for the GDG Markham 24-hour civic-tech hackathon (waste-reduction track).
 The full product spec, data model, API contract and build phases live in [docs/SPEC.md](docs/SPEC.md).
+<img width="1905" height="812" alt="image" src="https://github.com/user-attachments/assets/c3f93f4d-56e8-4e14-a918-3d04df67062e" />
+
 
 > **Verify rules against markham.ca "What Goes Where" before demo.**
 > `data/markham_rules.json` currently holds a 10-item starter set; the spec calls for ~120.
